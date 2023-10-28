@@ -1,0 +1,11 @@
+-- local light     = require 'light_and_shadows.light'
+local constants = require "light_and_shadows.constants"
+
+function update(self, dt)
+    
+    constants.cam_look_at_position = go.get_world_position("/player/dummy/dummy")
+    constants.cam_pos = go.get_world_position("/player/operator/operator")
+
+    -- light.update(self, dt)
+end
+

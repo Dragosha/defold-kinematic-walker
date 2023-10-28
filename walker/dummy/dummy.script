@@ -43,6 +43,7 @@ function init(self)
     model_standing = msg.url('model#standing'),
   }
 
+  print(msg.url())
   if self.operator ~= self.urls.this then
     self.urls.operator = self.operator
   end

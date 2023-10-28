@@ -1,4 +1,4 @@
-material: "/walker/dummy/materials/model.material"
+material: "/light_and_shadows/materials/mesh/mesh.material"
 vertices: "/walker/dummy/models/standing.buffer"
 textures: "/walker/dummy/textures/blue.png"
 primitive_type: PRIMITIVE_TRIANGLES

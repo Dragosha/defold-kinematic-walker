@@ -9,6 +9,8 @@
 --
 -- Lifecycle
 
+local light_and_shadows = require "light_and_shadows.light_and_shadows"
+
 function init(self)
   self.sky_color = vmath.vector4(0.67, 0.80, 0.94, 1)
 
@@ -26,9 +28,18 @@ function init(self)
   self.text = {
     predicate = render.predicate({ 'text' })
   }
+  
+  --
+  self.shadow_pred = render.predicate({ 'shadow' }) -- all objects that have to cast shadows
+  self.constants = render.constant_buffer()
+  light_and_shadows.init(self)
+  --
 end
 
 function update(self)
+  --
+  light_and_shadows.update(self)
+  --
   self.window = {
     width = render.get_window_width(),
     height = render.get_window_height()
@@ -44,6 +55,7 @@ function update(self)
   render.set_viewport(0, 0, self.window.width, self.window.height)
 
   -- scene
+  local frustum = {frustum = self.scene.projection * self.scene.view, constants = self.constants}
   render.set_view(self.scene.view)
   render.set_projection(self.scene.projection)
   render.set_blend_func(render.BLEND_SRC_ALPHA, render.BLEND_ONE_MINUS_SRC_ALPHA)
@@ -51,7 +63,9 @@ function update(self)
   render.enable_state(render.STATE_CULL_FACE)
   render.enable_state(render.STATE_DEPTH_TEST)
   render.set_depth_mask(true)
-  render.draw(self.scene.predicate)
+  render.enable_texture(1, self.shadowmap_buffer, render.BUFFER_COLOR_BIT) -- created in light_and_shadows.init
+  render.draw(self.scene.predicate, frustum)
+  render.disable_texture(1)
 
   -- debug
   render.disable_state(render.STATE_DEPTH_TEST)
